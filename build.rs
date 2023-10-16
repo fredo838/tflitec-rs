@@ -512,8 +512,8 @@ fn main() {
     };
     if os != "ios" {
         println!("cargo:rustc-link-search=native={}", out_path.display());
-        println!("cargo:rustc-link-lib=dylib=tensorflowlite_c");
-        println!("cargo:rustc-link-lib=dylib=tensorflowlite_flex");
+        // println!("cargo:rustc-link-lib=dylib=tensorflowlite_c");
+        println!("cargo:rustc-link-lib=dylib=tensorflowlite_c_flex");
     } else {
         println!("cargo:rustc-link-search=framework={}", out_path.display());
         println!("cargo:rustc-link-lib=framework=TensorFlowLiteC");
