@@ -375,11 +375,13 @@ fn generate_bindings(tf_src_path: PathBuf) {
         );
     }
 
-    let bindings = builder
+    let builder = builder
         .clang_arg(format!("-I{}", tf_src_path.to_str().unwrap()))
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
-        .parse_callbacks(Box::new(bindgen::CargoCallbacks))
+        .parse_callbacks(Box::new(bindgen::CargoCallbacks));
+    panic!("{:?}", builder.command_line_flags());
+    let bindings = builder
         // Finish the builder and generate the bindings.
         .generate()
         // Unwrap the Result and panic on failure.
@@ -394,7 +396,10 @@ fn generate_bindings(tf_src_path: PathBuf) {
 fn install_prebuilt(prebuilt_tflitec_path: &str, tf_src_path: &Path, lib_output_path: &PathBuf) {
     // Copy prebuilt library to given path
     {
-        println!("DEBUG       {:?} {:?}", prebuilt_tflitec_path, lib_output_path);
+        println!(
+            "DEBUG       {:?} {:?}",
+            prebuilt_tflitec_path, lib_output_path
+        );
         let prebuilt_tflitec_path = PathBuf::from(prebuilt_tflitec_path);
         // Copy .{so,dylib,dll,Framework} file
         copy_or_overwrite(&prebuilt_tflitec_path, lib_output_path);
@@ -528,11 +533,15 @@ fn main() {
         let tf_src_path = out_path.join(format!("tensorflow_{}", TAG));
         let lib_output_path_c = lib_output_path("tensorflow_c");
         let lib_output_path_flex = lib_output_path("tensorflow_flex");
-        
+
         if let Some(prebuilt_tflitec_path) = get_target_dependent_env_var(PREBUILT_PATH_ENV_VAR) {
             let prebuilt_tflitec_flex_path = env::var(PREBUILT_FLEX_PATH_ENV_VAR).unwrap();
             install_prebuilt(&prebuilt_tflitec_path, &tf_src_path, &lib_output_path_c);
-            install_prebuilt(&prebuilt_tflitec_flex_path, &tf_src_path, &lib_output_path_flex);
+            install_prebuilt(
+                &prebuilt_tflitec_flex_path,
+                &tf_src_path,
+                &lib_output_path_flex,
+            );
         } else {
             // Build from source
             check_and_set_envs();
