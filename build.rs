@@ -210,11 +210,11 @@ fn check_and_set_envs() {
     }
 }
 
-fn lib_output_path() -> PathBuf {
+fn lib_output_path(name: &str) -> PathBuf {
     if target_os() != "ios" {
         let ext = dll_extension();
         let lib_prefix = dll_prefix();
-        out_dir().join(format!("{}tensorflowlite_c.{}", lib_prefix, ext))
+        out_dir().join(format!("{}{name}.{}", lib_prefix, ext))
     } else {
         out_dir().join("TensorFlowLiteC.framework")
     }
@@ -525,12 +525,13 @@ fn main() {
         prepare_for_docsrs();
     } else {
         let tf_src_path = out_path.join(format!("tensorflow_{}", TAG));
-        let lib_output_path = lib_output_path();
+        let lib_output_path_c = lib_output_path("tensorflow_c");
+        let lib_output_path_flex = lib_output_path("tensorflow_flex");
         
         if let Some(prebuilt_tflitec_path) = get_target_dependent_env_var(PREBUILT_PATH_ENV_VAR) {
             let prebuilt_tflitec_flex_path = PREBUILT_FLEX_PATH_ENV_VAR;
-            install_prebuilt(&prebuilt_tflitec_path, &tf_src_path, &lib_output_path);
-            install_prebuilt(&prebuilt_tflitec_flex_path, &tf_src_path, &lib_output_path);
+            install_prebuilt(&prebuilt_tflitec_path, &tf_src_path, &lib_output_path_c);
+            install_prebuilt(&prebuilt_tflitec_flex_path, &tf_src_path, &lib_output_path_flex);
         } else {
             // Build from source
             check_and_set_envs();
