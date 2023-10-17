@@ -515,7 +515,7 @@ fn main() {
     if os != "ios" {
         println!("cargo:rustc-link-search=native={}", out_path.display());
         println!("cargo:rustc-link-lib=dylib=tensorflowlite_c");
-        // println!("cargo:rustc-link-lib=dylib=tensorflowlite_c_flex");
+        println!("cargo:rustc-link-lib=dylib=tensorflowlite_c_flex");
     } else {
         println!("cargo:rustc-link-search=framework={}", out_path.display());
         println!("cargo:rustc-link-lib=framework=TensorFlowLiteC");
@@ -544,7 +544,7 @@ fn main() {
                 lib_output_path.as_path(),
             );
         }
-        let tensorflow_src_dir = env::var("TENSORLFOW_SRC_DIR").unwrap();
+        let tensorflow_src_dir = env::var("TENSORFLOW_SRC_DIR").unwrap();
         let tensorflow_src_dir = Path::new(&tensorflow_src_dir).to_path_buf();
         // Generate bindings using headers
         generate_bindings(tensorflow_src_dir);
