@@ -33,4 +33,4 @@ all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
 
 [build]
-rustflags = ["-C", "link-arg=-Wl,--no-as-needed"]
+rustflags = ["-C", "link-arg=--no-as-needed"]
