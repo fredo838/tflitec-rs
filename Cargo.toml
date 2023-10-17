@@ -31,3 +31,6 @@ xnnpack_qs8 = ["xnnpack"]
 all-features = true
 # defines the configuration attribute `docsrs`
 rustdoc-args = ["--cfg", "docsrs"]
+
+[build]
+rustflags = ["-C", "link-arg=-Wl,--no-as-needed"]
