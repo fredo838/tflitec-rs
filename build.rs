@@ -544,7 +544,7 @@ fn main() {
             build_tensorflow_with_bazel(
                 tf_src_path.to_str().unwrap(),
                 &config,
-                lib_output_path.as_path(),
+                &lib_output_path_c.as_path(),
             );
         }
         let tensorflow_src_dir = env::var("TENSORFLOW_SRC_DIR").unwrap();
