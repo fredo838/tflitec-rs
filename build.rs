@@ -518,7 +518,7 @@ fn main() {
         }
         _ => arch,
     };
-    panic!(out_path);
+    panic!("{:?}", out_path);
     if os != "ios" {
         println!("cargo:rustc-link-search=native={}", out_path.display());
         println!("cargo:rustc-link-lib=dylib=tensorflowlite_c");
