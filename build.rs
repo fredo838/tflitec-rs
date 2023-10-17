@@ -530,7 +530,7 @@ fn main() {
         let lib_output_path_flex = lib_output_path("tensorflow_flex");
         
         if let Some(prebuilt_tflitec_path) = get_target_dependent_env_var(PREBUILT_PATH_ENV_VAR) {
-            let prebuilt_tflitec_flex_path = PREBUILT_FLEX_PATH_ENV_VAR.to_owned();
+            let prebuilt_tflitec_flex_path = env::var(PREBUILT_FLEX_PATH_ENV_VAR).unwrap();
             install_prebuilt(&prebuilt_tflitec_path, &tf_src_path, &lib_output_path_c);
             install_prebuilt(&prebuilt_tflitec_flex_path, &tf_src_path, &lib_output_path_flex);
         } else {
