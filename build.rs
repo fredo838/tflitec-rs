@@ -394,6 +394,7 @@ fn generate_bindings(tf_src_path: PathBuf) {
 fn install_prebuilt(prebuilt_tflitec_path: &str, tf_src_path: &Path, lib_output_path: &PathBuf) {
     // Copy prebuilt library to given path
     {
+        println!("DEBUG       {:?} {:?}", prebuilt_tflitec_path, lib_output_path);
         let prebuilt_tflitec_path = PathBuf::from(prebuilt_tflitec_path);
         // Copy .{so,dylib,dll,Framework} file
         copy_or_overwrite(&prebuilt_tflitec_path, lib_output_path);
