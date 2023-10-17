@@ -526,9 +526,11 @@ fn main() {
     } else {
         let tf_src_path = out_path.join(format!("tensorflow_{}", TAG));
         let lib_output_path = lib_output_path();
-
+        
         if let Some(prebuilt_tflitec_path) = get_target_dependent_env_var(PREBUILT_PATH_ENV_VAR) {
+            let prebuilt_tflitec_flex_path = PREBUILT_FLEX_PATH_ENV_VAR;
             install_prebuilt(&prebuilt_tflitec_path, &tf_src_path, &lib_output_path);
+            install_prebuilt(&prebuilt_tflitec_flex_path, &tf_src_path, &lib_output_path);
         } else {
             // Build from source
             check_and_set_envs();
