@@ -10,6 +10,7 @@ const TAG: &str = "v2.9.1";
 const TF_GIT_URL: &str = "https://github.com/tensorflow/tensorflow.git";
 const BAZEL_COPTS_ENV_VAR: &str = "TFLITEC_BAZEL_COPTS";
 const PREBUILT_PATH_ENV_VAR: &str = "TFLITEC_PREBUILT_PATH";
+const PREBUILT_FLEX_PATH_ENV_VAR: &str = "TFLITEC_FLEX_PREBUILT_PATH";
 const HEADER_DIR_ENV_VAR: &str = "TFLITEC_HEADER_DIR";
 
 fn target_os() -> String {
@@ -486,6 +487,7 @@ fn main() {
         let env_vars = [
             BAZEL_COPTS_ENV_VAR,
             PREBUILT_PATH_ENV_VAR,
+            PREBUILT_FLEX_PATH_ENV_VAR,
             HEADER_DIR_ENV_VAR,
         ];
         for env_var in env_vars {
@@ -542,8 +544,9 @@ fn main() {
                 lib_output_path.as_path(),
             );
         }
-
+        let tensorflow_src_dir = env::var("TENSORLFOW_SRC_DIR").unwrap();
+        let tensorflow_src_dir = Path::new(&tensorflow_src_dir).to_path_buf();
         // Generate bindings using headers
-        generate_bindings(tf_src_path);
+        generate_bindings(tensorflow_src_dir);
     }
 }
