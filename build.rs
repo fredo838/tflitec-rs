@@ -380,7 +380,7 @@ fn generate_bindings(tf_src_path: PathBuf) {
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks));
-    panic!("{:?}", builder.command_line_flags());
+    // panic!("{:?}", builder.command_line_flags());
     let bindings = builder
         // Finish the builder and generate the bindings.
         .generate()
