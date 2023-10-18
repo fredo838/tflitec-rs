@@ -380,7 +380,7 @@ impl<'a> Interpreter<'a> {
     
     unsafe fn configure_flex(interpreter_options_ptr: *mut TfLiteInterpreterOptions) -> *mut TfLiteDelegate {
         let flex_delegate_ptr = crate::interpreter::TF_AcquireFlexDelegate();
-        let test = TfLiteXNNPackDelegateCreate(&flex_delegate_ptr);
+        let test = TfLiteDelegateCreate(&flex_delegate_ptr);
         TfLiteInterpreterOptionsAddDelegate(interpreter_options_ptr, test);
         test
     }
