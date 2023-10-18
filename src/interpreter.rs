@@ -149,7 +149,7 @@ impl<'a> Interpreter<'a> {
                     interpreter_ptr,
                     #[cfg(feature = "xnnpack")]
                     xnnpack_delegate_ptr,
-                    flex_delegate_ptr,
+                    // flex_delegate_ptr,
                     model,
                 })
             }
