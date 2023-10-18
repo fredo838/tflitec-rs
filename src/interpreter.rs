@@ -72,7 +72,7 @@ pub struct Interpreter<'a> {
     #[cfg(feature = "xnnpack")]
     xnnpack_delegate_ptr: Option<*mut TfLiteDelegate>,
 
-    flex_delegate_ptr: *mut TfLiteDelegate,
+    // flex_delegate_ptr: *mut TfLiteDelegate,
     /// The underlying `Model` to limit lifetime of the interpreter.
     /// See this issue for details:
     /// <https://github.com/tensorflow/tensorflow/issues/53628>
