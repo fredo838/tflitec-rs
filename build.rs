@@ -17,11 +17,6 @@ fn target_os() -> String {
     env::var("CARGO_CFG_TARGET_OS").expect("Unable to get TARGET_OS")
 }
 
-#[link(name = "tensorflowlite_flex")]
-extern {
-    // …
-}
-
 fn dll_extension() -> &'static str {
     match target_os().as_str() {
         "macos" => "dylib",
