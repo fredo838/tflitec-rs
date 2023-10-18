@@ -532,8 +532,8 @@ fn main() {
         prepare_for_docsrs();
     } else {
         let tf_src_path = out_path.join(format!("tensorflow_{}", TAG));
-        let lib_output_path_c = lib_output_path("tensorflow_c");
-        let lib_output_path_flex = lib_output_path("tensorflow_flex");
+        let lib_output_path_c = lib_output_path("tensorflowlite_c");
+        let lib_output_path_flex = lib_output_path("tensorflowlite_flex");
 
         if let Some(prebuilt_tflitec_path) = get_target_dependent_env_var(PREBUILT_PATH_ENV_VAR) {
             let prebuilt_tflitec_flex_path = env::var(PREBUILT_FLEX_PATH_ENV_VAR).unwrap();
