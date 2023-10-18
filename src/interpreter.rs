@@ -374,7 +374,7 @@ impl<'a> Interpreter<'a> {
     }
     
     unsafe fn configure_flex(interpreter_options_ptr: *mut TfLiteInterpreterOptions) -> *mut TfLiteDelegate {
-        let flex_delegate_ptr = TF_AcquireFlexDelegate();
+        let flex_delegate_ptr = crate::TF_AcquireFlexDelegate();
         TfLiteInterpreterOptionsAddDelegate(interpreter_options_ptr, flex_delegate_ptr);
         flex_delegate_ptr
     }
