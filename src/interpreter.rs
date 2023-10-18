@@ -11,8 +11,8 @@ use std::fmt::{Debug, Formatter};
 
 
 #[link(name = "tensorflowlite_flex")]
-extern {
-    // …
+extern "C" {
+    fn TF_AcquireFlexDelegate() -> TfLiteDelegate;
 }
 
 /// Options for configuring the [`Interpreter`].
@@ -72,6 +72,7 @@ pub struct Interpreter<'a> {
     #[cfg(feature = "xnnpack")]
     xnnpack_delegate_ptr: Option<*mut TfLiteDelegate>,
 
+    flex_delegate_ptr: *mut TfLiteDelegate,
     /// The underlying `Model` to limit lifetime of the interpreter.
     /// See this issue for details:
     /// <https://github.com/tensorflow/tensorflow/issues/53628>
@@ -121,6 +122,7 @@ impl<'a> Interpreter<'a> {
 
             #[cfg(feature = "xnnpack")]
             let mut xnnpack_delegate_ptr: Option<*mut TfLiteDelegate> = None;
+            
             #[cfg(feature = "xnnpack")]
             {
                 if let Some(options) = options.as_ref() {
@@ -130,6 +132,8 @@ impl<'a> Interpreter<'a> {
                     }
                 }
             }
+            let mut flex_delegate_ptr: *mut TfLiteDelegate = Interpreter::configure_flex(options_ptr);
+
 
             // TODO(ebraraktas): TfLiteInterpreterOptionsSetErrorReporter
             let model_ptr = model.model_ptr as *const TfLiteModel;
@@ -143,6 +147,7 @@ impl<'a> Interpreter<'a> {
                     interpreter_ptr,
                     #[cfg(feature = "xnnpack")]
                     xnnpack_delegate_ptr,
+                    flex_delegate_ptr,
                     model,
                 })
             }
@@ -366,6 +371,12 @@ impl<'a> Interpreter<'a> {
         let xnnpack_delegate_ptr = TfLiteXNNPackDelegateCreate(&xnnpack_options);
         TfLiteInterpreterOptionsAddDelegate(interpreter_options_ptr, xnnpack_delegate_ptr);
         xnnpack_delegate_ptr
+    }
+    
+    unsafe fn configure_flex(interpreter_options_ptr: *mut TfLiteInterpreterOptions) -> *mut TfLiteDelegate {
+        let flex_delegate_ptr = TF_AcquireFlexDelegate();
+        TfLiteInterpreterOptionsAddDelegate(interpreter_options_ptr, flex_delegate_ptr);
+        flex_delegate_ptr
     }
 }
 
