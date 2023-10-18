@@ -12,7 +12,7 @@ use std::fmt::{Debug, Formatter};
 
 #[link(name = "tensorflowlite_flex")]
 extern "C" {
-    fn TF_AcquireFlexDelegate() -> TfLiteDelegate;
+    fn TF_AcquireFlexDelegate() -> *mut TfLiteDelegate;
 }
 
 /// Options for configuring the [`Interpreter`].
