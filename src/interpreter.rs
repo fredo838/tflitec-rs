@@ -202,6 +202,7 @@ impl<'a> Interpreter<'a> {
             let tensor_ptr = TfLiteInterpreterGetInputTensor(self.interpreter_ptr, index as i32);
             Tensor::from_raw(tensor_ptr as *mut TfLiteTensor).map_err(|error| {
                 if error.kind() == ErrorKind::ReadTensorError {
+                    panic!("{:?}", error);
                     Error::new(ErrorKind::AllocateTensorsRequired)
                 } else {
                     error
