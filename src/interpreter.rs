@@ -132,9 +132,11 @@ impl<'a> Interpreter<'a> {
                     }
                 }
             }
-            let mut flex_delegate_ptr: *mut TfLiteDelegate = Interpreter::configure_flex(options_ptr);
+            // let mut flex_delegate_ptr: *mut TfLiteDelegate = Interpreter::configure_flex(options_ptr);
 
-
+            if false {
+                let flex_delegate_ptr = crate::interpreter::TF_AcquireFlexDelegate();
+            }
             // TODO(ebraraktas): TfLiteInterpreterOptionsSetErrorReporter
             let model_ptr = model.model_ptr as *const TfLiteModel;
             let interpreter_ptr = TfLiteInterpreterCreate(model_ptr, options_ptr);
@@ -373,13 +375,14 @@ impl<'a> Interpreter<'a> {
         xnnpack_delegate_ptr
     }
     
-    unsafe fn configure_flex(interpreter_options_ptr: *mut TfLiteInterpreterOptions) -> *mut TfLiteDelegate {
-        if false {
-            let flex_delegate_ptr = crate::interpreter::TF_AcquireFlexDelegate();
-        }
-        TfLiteInterpreterOptionsAddDelegate(interpreter_options_ptr, flex_delegate_ptr);
-        flex_delegate_ptr
-    }
+    // unsafe fn configure_flex(interpreter_options_ptr: *mut TfLiteInterpreterOptions) -> *mut TfLiteDelegate {
+    //     if false {
+    //         let flex_delegate_ptr = crate::interpreter::TF_AcquireFlexDelegate();
+    //     }
+    //     TfLiteInterpreterOptionsAddDelegate(interpreter_options_ptr, flex_delegate_ptr);
+    //     flex_delegate_ptr
+    // }
+
 }
 
 impl Drop for Interpreter<'_> {
