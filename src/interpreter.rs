@@ -9,6 +9,12 @@ use crate::tensor::Tensor;
 use crate::{Error, ErrorKind, Result};
 use std::fmt::{Debug, Formatter};
 
+
+#[link(name = "tensorflowlite_flex")]
+extern {
+    // …
+}
+
 /// Options for configuring the [`Interpreter`].
 #[derive(Debug, Eq, PartialEq, Copy, Clone, Hash, Ord, PartialOrd)]
 pub struct Options {
