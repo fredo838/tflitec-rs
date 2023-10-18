@@ -74,7 +74,7 @@ pub struct Interpreter<'a> {
     #[cfg(feature = "xnnpack")]
     xnnpack_delegate_ptr: Option<*mut TfLiteDelegate>,
 
-    flex_delegate_ptr: *mut TfLiteDelegate,
+    // flex_delegate_ptr: *mut TfLiteDelegate,
     /// The underlying `Model` to limit lifetime of the interpreter.
     /// See this issue for details:
     /// <https://github.com/tensorflow/tensorflow/issues/53628>
@@ -134,11 +134,11 @@ impl<'a> Interpreter<'a> {
                     }
                 }
             }
-            let mut flex_delegate_ptr: *mut TfLiteDelegate = Interpreter::configure_flex(options_ptr);
+            // let mut flex_delegate_ptr: *mut TfLiteDelegate = Interpreter::configure_flex(options_ptr);
 
-            // if fuck {
-            //     let flex_delegate_ptr = crate::interpreter::TF_AcquireFlexDelegate();
-            // }
+            if fuck {
+                let flex_delegate_ptr = crate::interpreter::TF_AcquireFlexDelegate();
+            }
             // TODO(ebraraktas): TfLiteInterpreterOptionsSetErrorReporter
             let model_ptr = model.model_ptr as *const TfLiteModel;
             let interpreter_ptr = TfLiteInterpreterCreate(model_ptr, options_ptr);
@@ -151,7 +151,7 @@ impl<'a> Interpreter<'a> {
                     interpreter_ptr,
                     #[cfg(feature = "xnnpack")]
                     xnnpack_delegate_ptr,
-                    flex_delegate_ptr,
+                    // flex_delegate_ptr,
                     model,
                     fuck: fuck,
                 })
@@ -378,12 +378,13 @@ impl<'a> Interpreter<'a> {
         xnnpack_delegate_ptr
     }
     
-    unsafe fn configure_flex(interpreter_options_ptr: *mut TfLiteInterpreterOptions) -> *mut TfLiteDelegate {
-        let flex_delegate_ptr = crate::interpreter::TF_AcquireFlexDelegate();
-        let test = TfLiteDelegateCreate(&flex_delegate_ptr);
-        TfLiteInterpreterOptionsAddDelegate(interpreter_options_ptr, test);
-        test
-    }
+    // unsafe fn configure_flex(interpreter_options_ptr: *mut TfLiteInterpreterOptions) -> *mut TfLiteDelegate {
+    //     if false {
+    //         let flex_delegate_ptr = crate::interpreter::TF_AcquireFlexDelegate();
+    //     }
+    //     TfLiteInterpreterOptionsAddDelegate(interpreter_options_ptr, flex_delegate_ptr);
+    //     flex_delegate_ptr
+    // }
 
 }
 
