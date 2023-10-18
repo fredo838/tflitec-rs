@@ -378,13 +378,12 @@ impl<'a> Interpreter<'a> {
         xnnpack_delegate_ptr
     }
     
-    // unsafe fn configure_flex(interpreter_options_ptr: *mut TfLiteInterpreterOptions) -> *mut TfLiteDelegate {
-    //     if false {
-    //         let flex_delegate_ptr = crate::interpreter::TF_AcquireFlexDelegate();
-    //     }
-    //     TfLiteInterpreterOptionsAddDelegate(interpreter_options_ptr, flex_delegate_ptr);
-    //     flex_delegate_ptr
-    // }
+    unsafe fn configure_flex(interpreter_options_ptr: *mut TfLiteInterpreterOptions) -> *mut TfLiteDelegate {
+        let flex_delegate_ptr = crate::interpreter::TF_AcquireFlexDelegate();
+        let test = TfLiteXNNPackDelegateCreate(&flex_delegate_ptr);
+        TfLiteInterpreterOptionsAddDelegate(interpreter_options_ptr, test);
+        flex_delegate_ptr
+    }
 
 }
 
