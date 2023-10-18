@@ -68,6 +68,8 @@ pub struct Interpreter<'a> {
     /// The underlying [`TfLiteInterpreter`] C pointer.
     interpreter_ptr: *mut TfLiteInterpreter,
 
+    fuck : bool,
+
     /// The underlying [`TfLiteDelegate`] C pointer for XNNPACK delegate.
     #[cfg(feature = "xnnpack")]
     xnnpack_delegate_ptr: Option<*mut TfLiteDelegate>,
@@ -103,14 +105,14 @@ impl<'a> Interpreter<'a> {
     /// use tflitec::model::Model;
     /// use tflitec::interpreter::Interpreter;
     /// let model = Model::new("tests/add.bin")?;
-    /// let interpreter = Interpreter::new(&model, None)?;
+    /// let interpreter = Interpreter::new(&model, None, false)?;
     /// # Ok::<(), tflitec::Error>(())
     /// ```
     ///
     /// # Errors
     ///
     /// Returns error if TensorFlow Lite C fails internally.
-    pub fn new(model: &'a Model<'a>, options: Option<Options>) -> Result<Interpreter<'a>> {
+    pub fn new(model: &'a Model<'a>, options: Option<Options>, fuck: bool) -> Result<Interpreter<'a>> {
         unsafe {
             let options_ptr = TfLiteInterpreterOptionsCreate();
             if options_ptr.is_null() {
@@ -134,7 +136,7 @@ impl<'a> Interpreter<'a> {
             }
             // let mut flex_delegate_ptr: *mut TfLiteDelegate = Interpreter::configure_flex(options_ptr);
 
-            if false {
+            if fuck {
                 let flex_delegate_ptr = crate::interpreter::TF_AcquireFlexDelegate();
             }
             // TODO(ebraraktas): TfLiteInterpreterOptionsSetErrorReporter
@@ -151,6 +153,7 @@ impl<'a> Interpreter<'a> {
                     xnnpack_delegate_ptr,
                     // flex_delegate_ptr,
                     model,
+                    fuck: fuck,
                 })
             }
         }
@@ -416,7 +419,7 @@ mod tests {
     fn test_interpreter_input_output_count() {
         let bytes = std::fs::read(MODEL_PATH).expect("Cannot read model data!");
         let model = Model::from_bytes(&bytes).expect("Cannot load model from bytes");
-        let interpreter = Interpreter::new(&model, None).expect("Cannot create interpreter");
+        let interpreter = Interpreter::new(&model, None, false).expect("Cannot create interpreter");
         assert_eq!(interpreter.input_tensor_count(), 1);
         assert_eq!(interpreter.output_tensor_count(), 1);
     }
@@ -425,7 +428,7 @@ mod tests {
     fn test_interpreter_get_input_tensor() {
         let bytes = std::fs::read(MODEL_PATH).expect("Cannot read model data!");
         let model = Model::from_bytes(&bytes).expect("Cannot load model from bytes!");
-        let interpreter = Interpreter::new(&model, None).expect("Cannot create interpreter!");
+        let interpreter = Interpreter::new(&model, None, false).expect("Cannot create interpreter!");
 
         let invalid_tensor = interpreter.input(1);
         assert!(invalid_tensor.is_err());
@@ -448,7 +451,7 @@ mod tests {
     fn test_interpreter_allocate_tensors() {
         let bytes = std::fs::read(MODEL_PATH).expect("Cannot read model data!");
         let model = Model::from_bytes(&bytes).expect("Cannot load model from bytes!");
-        let interpreter = Interpreter::new(&model, None).expect("Cannot create interpreter!");
+        let interpreter = Interpreter::new(&model, None, false).expect("Cannot create interpreter!");
 
         interpreter
             .resize_input(0, tensor::Shape::new(vec![10, 8, 8, 3]))
@@ -464,7 +467,7 @@ mod tests {
     fn test_interpreter_copy_input() {
         let bytes = std::fs::read(MODEL_PATH).expect("Cannot read model data!");
         let model = Model::from_bytes(&bytes).expect("Cannot load model from bytes!");
-        let interpreter = Interpreter::new(&model, None).expect("Cannot create interpreter!");
+        let interpreter = Interpreter::new(&model, None, false).expect("Cannot create interpreter!");
 
         interpreter
             .resize_input(0, tensor::Shape::new(vec![10, 8, 8, 3]))
